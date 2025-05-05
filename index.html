@@ -1,8 +1,387 @@
-<head>
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Initiative on Corruption | ContentLTD Newsroom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #212529;
+      }
 
-  <style>
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 1); /* Dark background for better visibility */
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: all; /* Ensure it blocks interactions */
+      }
 
-    body{
-    background-color: #000;}
-  </style>
-</head>
+      @keyframes bgg {
+        0% { background: rgba(0, 153, 255, 1); }
+        50% { background: rgba(41, 255, 121, 1); }
+        100% { background: rgba(255, 74, 88, 1); }
+      }
+
+      .loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 50px;
+        height: 50px;
+        margin: auto;
+      }
+
+      .loader .circle {
+        position: absolute;
+        width: 38px;
+        height: 38px;
+        opacity: 0;
+        transform: rotate(225deg);
+        animation-iteration-count: infinite;
+        animation-name: orbit;
+        animation-duration: 5.5s;
+      }
+
+      .loader .circle:after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 5px;
+        background: #fff;
+        box-shadow: 0 0 9px rgba(0,0,0,1);
+      }
+
+      .loader .circle:nth-child(2) {
+        animation-delay: 240ms;
+      }
+
+      .loader .circle:nth-child(3) {
+        animation-delay: 480ms;
+      }
+
+      .loader .circle:nth-child(4) {
+        animation-delay: 720ms;
+      }
+
+      .loader .circle:nth-child(5) {
+        animation-delay: 960ms;
+      }
+
+      .loader .bg {
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        margin-left: -16px;
+        margin-top: -16px;
+        border-radius: 13px;
+        background-color: #000;
+      }
+
+      @keyframes orbit {
+        0% {
+          transform: rotate(225deg);
+          opacity: 1;
+          animation-timing-function: ease-out;
+        }
+        7% {
+          transform: rotate(345deg);
+          animation-timing-function: linear;
+        }
+        30% {
+          transform: rotate(455deg);
+          animation-timing-function: ease-in-out;
+        }
+        39% {
+          transform: rotate(690deg);
+          animation-timing-function: linear;
+        }
+        70% {
+          transform: rotate(815deg);
+          opacity: 1;
+          animation-timing-function: ease-out;
+        }
+        75% {
+          transform: rotate(945deg);
+          animation-timing-function: ease-out;
+        }
+        76% {
+          transform: rotate(945deg);
+          opacity: 0;
+        }
+        100% {
+          transform: rotate(945deg);
+          opacity: 0;
+        }
+      }
+
+      body.loaded #loading-screen {
+        display: none;
+      }
+
+      header {
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0;
+      }
+  
+      .logo {
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+  
+      nav {
+        font-size: 0.95rem;
+      }
+  
+      nav a {
+        margin-left: 20px;
+        text-decoration: none;
+        color: #333;
+      }
+  
+      main {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 0 20px;
+      }
+  
+      .label {
+        color: #f7931e;
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+  
+      h1 {
+        font-size: 2.2rem;
+        margin: 0;
+        line-height: 1.3;
+      }
+  
+      .subheadline {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin-top: 10px;
+      }
+  
+      .meta {
+        font-size: 0.9rem;
+        color: #777;
+        margin-top: 15px;
+      }
+  
+      .social-icons {
+        margin-top: 15px;
+      }
+  
+      .social-icons a {
+        margin-right: 12px;
+        color: #333;
+        font-size: 1.2rem;
+        text-decoration: none;
+      }
+  
+      .featured-image {
+        margin-top: 30px;
+        width: 100%;
+        max-width: 1080px; /* Restrict the width to fit the article */
+        height: auto; /* Maintain aspect ratio */
+        border-bottom-left-radius: 8px; /* Apply border-radius only to the bottom */
+        border-bottom-right-radius: 8px;
+        filter: brightness(1.2); /* Increase bloom effect */
+      }
+  
+      article {
+        margin-top: 40px;
+        line-height: 1.7;
+        font-size: 1.05rem;
+      }
+  
+      footer {
+        text-align: center;
+        padding: 30px;
+        font-size: 0.9rem;
+        color: #777;
+        border-top: 1px solid #eee;
+        margin-top: 50px;
+      }
+
+      body.dark-mode {
+        background-color: #121212;
+        color: #e0e0e0;
+      }
+
+      header.dark-mode, footer.dark-mode {
+        border-color: #333;
+      }
+
+      nav a.dark-mode {
+        color: #e0e0e0;
+      }
+
+      .label.dark-mode {
+        color: #f9a825;
+      }
+
+      .subheadline.dark-mode {
+        color: #b0bec5;
+      }
+
+      .meta.dark-mode {
+        color: #9e9e9e;
+      }
+
+      .social-icons a.dark-mode {
+        color: #e0e0e0;
+      }
+
+      .toggle-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .toggle {
+        width: 40px;
+        height: 20px;
+        background-color: #777;
+        border-radius: 10px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .toggle.dark-mode {
+        background-color: #f9a825;
+      }
+
+      .toggle-circle {
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: left 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle.dark-mode .toggle-circle {
+        left: 22px;
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const body = document.body;
+        const footer = document.querySelector('footer');
+        const toggleContainer = document.createElement('div');
+        toggleContainer.classList.add('toggle-container');
+
+        const toggle = document.createElement('div');
+        toggle.classList.add('toggle', 'dark-mode'); // Start in dark mode
+
+        const toggleCircle = document.createElement('div');
+        toggleCircle.classList.add('toggle-circle');
+        toggle.appendChild(toggleCircle);
+
+        // Apply dark mode classes by default
+        body.classList.add('dark-mode');
+        footer.classList.add('dark-mode');
+        document.querySelectorAll('nav a, .label, .subheadline, .meta, .social-icons a').forEach(el => {
+          el.classList.add('dark-mode');
+        });
+
+        toggle.addEventListener('click', () => {
+          body.classList.toggle('dark-mode');
+          footer.classList.toggle('dark-mode');
+          toggle.classList.toggle('dark-mode');
+          document.querySelectorAll('nav a, .label, .subheadline, .meta, .social-icons a').forEach(el => {
+            el.classList.toggle('dark-mode');
+          });
+        });
+
+        toggleContainer.appendChild(toggle);
+        footer.appendChild(toggleContainer);
+
+        // Ensure loader completes at least one cycle
+        const loaderDuration = 5500; // Duration of one loader cycle in milliseconds
+        setTimeout(() => {
+          body.classList.add('loaded');
+        }, loaderDuration); // Wait for one cycle before hiding the loader
+      });
+    </script>
+  </head>
+  <body>
+    <div id="loading-screen">
+      <div class="loader">
+        <div class="bg"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+      </div>
+    </div>
+    <header>
+      <div class="logo">ContentLTD℠</div>
+      <nav>
+        
+        
+      </nav>
+    </header>
+  
+    <main>
+      <div class="label">Press Release</div>
+      <h1>Temporarily sunsetting</h1>
+      <p class="subheadline">
+        Temporarily sunsetting all services until further notice.
+      </p>
+      <img class="featured-image" src="https://cdn.contentltd.net/okrp-banner.png">
+      <p class="meta">May 5, 2025</p>
+  
+      
+  
+      
+  
+      <article>
+        <p>Hello User,</p>
+
+        <p>ContentLTD is facing some controversy, we will make a press release later explaining further, nonetheless we unfortunately have to temporarily sunset to see what we have to do in this situation. We will use this time to:</p>
+        
+        <ul>
+          <li>Figure out what we need to do</li>
+          <li>Do staff reforms and execute what we decided what is needed</li>
+          <li>Then Re-Open</li>
+        </ul>
+        
+        <p>During this period, all services will be down. The website will not be accessible, and the Bot will be off. We appreciate your support during this troubling time.</p>
+        
+        <p>Thanks,<br>
+        ContentLTD</p>
+      </article>
+    </main>
+  
+    <footer>
+      © 2025 ContentLTD℠. All rights reserved.
+    </footer>
+  
+  
+  </body></html>
+
