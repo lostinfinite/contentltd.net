@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branding Guidelines | ContentLTD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/contentltd_white.webp">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
+            <div class="nav-links">
+                <a href="index.html#who-we-are">About</a>
+                <a href="index.html#features">Services</a>
+                <a href="index.html#ltdqsuite">The Bot</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="index.html#faq">FAQ</a>
+                <a href="https://discord.gg/P5d9CVZh" id="contact-navbar-btn">Contact</a>
+                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button">Join Discord</a>
+            </div>
+        </div>
+    </nav>
+    <main class="legal-main">
+        <section class="legal-section">
+
+                <h1>Branding Guidelines</h1>
+                <p class="legal-intro">These guidelines outline the proper use of ContentLTD's brand assets, including our logo, colors, and typography. Consistent branding helps us maintain a strong, recognizable identity across all platforms.</p>
+                <h2>1. Logo Usage</h2>
+                <ul>
+                    <li>Use the official ContentLTD logo provided in <strong>contentltd_white.webp</strong> (for dark backgrounds) and <strong>contentltd_black.webp</strong> (for light backgrounds).</li>
+                    <li>Do not alter, stretch, or recolor the logo.</li>
+                    <li>Maintain clear space around the logo equal to at least half the logo's height.</li>
+                    <li>Do not use the logo on backgrounds that reduce its visibility or contrast.</li>
+                </ul>
+                <h2>2. Brand Colors</h2>
+                <ul>
+                    <li><strong>Primary Accent:</strong> <span style="color:#FFBB00; font-weight:600;">#FFBB00</span></li>
+                    <li><strong>Background Dark:</strong> <span style="color:#1d1d1d; font-weight:600;">#1d1d1d</span></li>
+                    <li><strong>Background Accent:</strong> <span style="color:#000000; font-weight:600;">#000000</span></li>
+                    <li><strong>Text:</strong> <span style="color:#f5f5f5; font-weight:600;">#f5f5f5</span></li>
+                </ul>
+                <h2>3. Typography</h2>
+                <ul>
+                    <li>Headings: <strong>Inter</strong>, sans-serif</li>
+                    <li>Body: <strong>Open Sans</strong>, sans-serif</li>
+                </ul>
+                <h2>4. Do's and Don'ts</h2>
+                <ul>
+                    <li>Do use the logo and colors as provided.</li>
+                    <li>Do not modify or distort the logo.</li>
+                    <li>Do not use unapproved colors or fonts.</li>
+                    <li>Do not use the logo in a way that implies partnership or endorsement without permission.</li>
+                </ul>
+                <h2>5. Questions</h2>
+                <p>If you have questions about using ContentLTD's brand assets, please <a href="https://discord.gg/P5d9CVZh">contact us on Discord</a>.</p>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="footer-logo">
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="index.html#who-we-are">About</a>
+                        <a href="https://discord.gg/P5d9CVZh">Contact</a>
+                        <a href="branding.html">Branding</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Legal</h4>
+                        <a href="legal.html">Terms</a>
+                        <a href="privacy.html">Privacy</a>
+                        <a href="copyright.html">Copyright</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Support</h4>
+                        <a href="index.html#faq">FAQ</a>
+                        <a href="https://discord.gg/P5d9CVZh">Discord</a>
+                        <a href="https://discord.gg/P5d9CVZh">Docs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Made with <span style="color:#FF4B4B;">&#10084;&#65039;</span> by ContentLTD</p>
+                <p>&copy; 2025 ContentLTD. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <div class="loading-overlay" style="display:none;"><div class="loading-spinner"></div></div>
+    <script>
+    // Footer loading screen for internal links
+    const footerLinks = document.querySelectorAll('.footer-group a[href$=".html"]');
+    footerLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const loadingOverlay = document.querySelector('.loading-overlay');
+        loadingOverlay.style.display = 'flex';
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 700);
+      });
+    });
+    </script>
+</body>
+</html> 

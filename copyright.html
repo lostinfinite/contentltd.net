@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copyright Policy | ContentLTD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/contentltd_white.webp">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
+            <div class="nav-links">
+                <a href="index.html#who-we-are">About</a>
+                <a href="index.html#features">Services</a>
+                <a href="index.html#ltdqsuite">The Bot</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="index.html#faq">FAQ</a>
+                <a href="https://discord.gg/P5d9CVZh" id="contact-navbar-btn">Contact</a>
+                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button">Join Discord</a>
+            </div>
+        </div>
+    </nav>
+    <main class="legal-main">
+        <section class="legal-section">
+                <h1>Copyright Policy</h1>
+                <p class="legal-intro">ContentLTD respects the intellectual property rights of others and expects users of our website and services to do the same. This Copyright Policy outlines our approach to copyright protection and infringement claims.</p>
+                <h2>1. Ownership of Content</h2>
+                <p>All content, graphics, logos, and software on this website are the property of ContentLTD unless otherwise stated. Unauthorized use, reproduction, or distribution is strictly prohibited.</p>
+                <h2>2. Reporting Copyright Infringement</h2>
+                <p>If you believe that your copyrighted work has been used in a way that constitutes copyright infringement, please notify us by providing the following information:</p>
+                <ul>
+                    <li>A description of the copyrighted work you claim has been infringed.</li>
+                    <li>The location of the material on our website or services.</li>
+                    <li>Your contact information.</li>
+                    <li>A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.</li>
+                    <li>A statement, made under penalty of perjury, that the above information is accurate and that you are the copyright owner or authorized to act on the copyright owner's behalf.</li>
+                </ul>
+                <h2>3. Response to Claims</h2>
+                <p>Upon receiving a valid copyright infringement notice, ContentLTD will promptly investigate and take appropriate action, which may include removing or disabling access to the allegedly infringing material.</p>
+                <h2>4. Repeat Infringers</h2>
+                <p>ContentLTD may terminate the accounts of users who are repeat infringers of intellectual property rights.</p>
+                <h2>5. Contact</h2>
+                <p>To report copyright infringement, please email us as copyright@contentltd.net.</p>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="footer-logo">
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="#who-we-are">About</a>
+                        <a href="https://discord.gg/P5d9CVZh">Contact</a>
+                        <a href="branding.html">Branding</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Legal</h4>
+                        <a href="legal.html">Terms</a>
+                        <a href="privacy.html">Privacy</a>
+                        <a href="copyright.html">Copyright</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Support</h4>
+                        <a href="#faq">FAQ</a>
+                        <a href="https://discord.gg/P5d9CVZh">Discord</a>
+                        <a href="docs.html">Docs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Made with <span style="color:#FF4B4B;">&#10084;&#65039;</span> by ContentLTD</p>
+                <p>&copy; 2025 ContentLTD. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <div class="loading-overlay" style="display:none;"><div class="loading-spinner"></div></div>
+    <script>
+    // Footer loading screen for internal links
+    const footerLinks = document.querySelectorAll('.footer-group a[href$=".html"]');
+    footerLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const loadingOverlay = document.querySelector('.loading-overlay');
+        loadingOverlay.style.display = 'flex';
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 700);
+      });
+    });
+    </script>
+</body>
+</html> 

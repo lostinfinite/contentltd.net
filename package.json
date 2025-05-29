@@ -1,0 +1,24 @@
+{
+  "name": "contentltd-website",
+  "version": "1.0.0",
+  "description": "Static website for contentltd - Anti-Raid Bot for ER:LC communities",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve . -l 3000",
+    "build": "webpack --mode production"
+  },
+  "keywords": [
+    "contentltd",
+    "anti-raid",
+    "roblox",
+    "ER:LC"
+  ],
+  "author": "contentltd",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+} 
