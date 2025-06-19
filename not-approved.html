@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <style>
+        button {
+            background-color: transparent;
+            
+            color: white;
+            border: 2px solid #FFBB00;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+    </style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const isOnlyInf = params.toString() === 'inf';
+    const hasC = params.has('c');
+    const hasB = params.has('b');
+    const hasO = params.has('o');
+    const hasIPW = params.has('ipw');
+
+    // If only ?inf is present, show the infinite loading screen
+    const infLoading = document.querySelector('.inf-loading');
+    if (isOnlyInf && infLoading) {
+      infLoading.style.display = 'flex';
+      return; // Skip the rest of the logic
+    }
+
+    // Redirect if no valid parameter is found
+    if (!hasC && !hasB && !hasO && !hasIPW) {
+      const referrer = document.referrer;
+      window.location.href = referrer || 'https://contentltd.net/index';
+      return;
+    }
+
+    // Select all relevant sections
+    const countryDiv = document.querySelector('.country');
+    const banDiv = document.querySelector('.ban');
+    const otherDiv = document.querySelector('.other');
+    const ipwarnDiv = document.querySelector('.ipwarn');
+    const reasonSpan = document.getElementById('reason');
+
+    // Map for ?o= reason codes
+    const reasonMap = {
+      nip: "No IP / Your IP is invalid or we couldn't detect your country.",
+      ipb: "Your request could not be processed.",
+      nohu: "You are not a human.",
+      main: "The site is under maintenance.",
+      su: "The site has been manually shut down.",
+      uk: "An unknown error has occurred."
+    };
+
+    if (hasC) countryDiv.style.display = 'block';
+    if (hasB) banDiv.style.display = 'block';
+
+    if (hasO) {
+      otherDiv.style.display = 'block';
+      const reasonKey = params.get('o');
+      const reasonText = reasonMap[reasonKey] || "Unrecognized reason.";
+      if (reasonSpan) reasonSpan.textContent = reasonText;
+    }
+
+    if (hasIPW) {
+      ipwarnDiv.style.display = 'block';
+
+      const continueBtn = document.getElementById('continueAnyway');
+      const goBackBtn = document.getElementById('goBack');
+
+      if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+          let base = document.referrer;
+
+          // Default fallback if no referrer or invalid context
+          if (!base || base.startsWith("file://") || base === window.location.href) {
+            base = "https://contentltd.net/index";
+          }
+
+          const redirectURL = new URL(base);
+          redirectURL.searchParams.set('ipwarn', 'false');
+          window.location.href = redirectURL.href;
+        });
+      }
+
+      if (goBackBtn) {
+        goBackBtn.addEventListener('click', () => {
+          history.back();
+        });
+      }
+    }
+  });
+</script>
+
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your connection was not approved | ContentLTD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Open+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/contentltd_white.webp">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
+            
+        </div>
+    </nav>
+    <main class="legal-main">
+        <div class="country" style="display: none;">
+<h1>Access was blocked</h1><br>
+    <p>We are sorry but you were blocked from accessing the ContentLTD Website via contentltd.net or some other mode due to your country of origin. We do not permit users from certian countries to visit our site</p>
+</div>
+        <div class="ban" style="display: none;"><h1>Access was blocked</h1>
+<br>
+    <p>Your IP is currently Banned soooo.... Sorry? I mean this means you broke the rules.</p>
+
+</div>
+<div class="other" style="display: none;"><h1>Your connection was denied...</h1>
+<br>
+    <p>Your access was denied due to an error or complication when authenticating your IP. See information below:</p>
+<br>
+   <p>Reason: <span id="reason"></span> </p>
+</div>
+<div class="ipwarn" style="display: none;">
+    <h1>Warning</h1>
+  <p>It looks like you're using a VPN or proxy to access our site. That's fine, but just so you know, it might cause some network issues or prevent certain parts of the site from working properly based on your location. You're in charge, though. If you want to keep going, go for it. Just keep in mind that if something doesn't work right, try turning off your VPN or proxy and reloading the page.</p>
+  <br>
+  <button id="continueAnyway">Continue Despite This</button>
+  <button id="goBack">Go Back</button>
+</div>
+<div class="inf-loading" style="display: none !important; position: fixed; inset: 0; background: rgba(0,0,0,0.8); color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; z-index: 9999; flex-direction: column;">
+  <div class="spinner" style="border: 6px solid #fff; border-top: 6px solid #555; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+  <p style="margin-top: 20px;">Loading...</p>
+</div>
+
+<style>
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="footer-logo">
+            </div>
+
+                <p>© 2025 ContentLTD. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body></html>

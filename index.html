@@ -8,6 +8,107 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+<script>
+  const blockedCountries = [
+    "North Korea",
+    "Russia",
+    "Ukraine",
+    "United Arab Emirates",
+    "Israel"
+  ];
+
+  const vpnBypassKey = "vpnBypassTimestamp";
+
+  // Known VPN/Proxy/Hosting ISPs (add more as needed)
+  const knownVPNISPs = [
+    "packethub",
+    "m247",
+    "ovh",
+    "digitalocean",
+    "nforce",
+    "hostkey",
+    "contabo",
+    "amazon",
+    "google cloud",
+    "microsoft",
+    "data packet",
+    "linode",
+    "vultr",
+    "cloud",
+    "colo",
+    "proxy",
+    "vpn"
+  ];
+
+  // Check URL for ?ipwarn=false
+  function urlHasBypassFlag() {
+    return new URLSearchParams(window.location.search).get("ipwarn") === "false";
+  }
+
+  // Validate 24hr bypass
+  function hasValidBypass() {
+    const timestamp = localStorage.getItem(vpnBypassKey);
+    if (!timestamp) return false;
+    return (Date.now() - parseInt(timestamp)) < 24 * 60 * 60 * 1000;
+  }
+
+  // Store bypass
+  function saveBypassTimestamp() {
+    localStorage.setItem(vpnBypassKey, Date.now().toString());
+  }
+
+  // Remove query string from URL
+  function stripBypassQuery() {
+    const cleanURL = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, "", cleanURL);
+  }
+
+  // Setup
+  if (urlHasBypassFlag()) {
+    saveBypassTimestamp();
+    stripBypassQuery();
+  }
+
+  // Only run VPN/country check if bypass is NOT active
+  if (!hasValidBypass()) {
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        const country = (data.country_name || "").trim();
+        const isp = (data.org || "").toLowerCase();
+
+        if (!country || !isp) {
+          window.location.href = "not-approved.html?o=nip";
+          return;
+        }
+
+        // Country block
+        if (blockedCountries.includes(country)) {
+          window.location.href = "not-approved.html?c";
+          return;
+        }
+
+        // ISP-based VPN detection
+        for (const keyword of knownVPNISPs) {
+          if (isp.includes(keyword)) {
+            console.warn("🚫 VPN Detected via ISP:", isp);
+            window.location.href = "not-approved.html?ipw";
+            return;
+          }
+        }
+
+        console.log("✅ Access granted:", country, "-", isp);
+      })
+      .catch(err => {
+        console.error("GeoIP lookup failed:", err);
+        window.location.href = "not-approved.html?o=nip";
+      });
+  } else {
+    console.log("✅ VPN bypass active for this session.");
+  }
+</script>
+
+
 </head>
 <body>
     <!-- Navigation -->

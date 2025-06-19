@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | ContentLTD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/contentltd_white.webp">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
+            <div class="nav-links">
+                <a href="index.html#who-we-are">About</a>
+                <a href="index.html#features">Services</a>
+                <a href="index.html#ltdqsuite">The Bot</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="index.html#faq">FAQ</a>
+                <a href="https://discord.gg/P5d9CVZh" id="contact-navbar-btn">Contact</a>
+                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button">Join Discord</a>
+            </div>
+        </div>
+    </nav>
+    <main class="legal-main">
+        <section class="legal-section">
+            <h1>ContentLTD℠ Privacy Policy</h1>
+            <p><strong>Effective Date:</strong> 6/14/25</p>
+            <p>We are committed to respecting your privacy and data. This policy explains how we collect, use, and protect your information.</p>
+            <h2>1. What We Collect</h2>
+            <p>Depending on how you interact with us, we may collect:</p>
+            <ul>
+                <li>Your name, email, and billing details (via Stripe, Ko-fi, PayPal, etc.)</li>
+                <li>IP address, user agent, and country (for fraud prevention)</li>
+                <li>Platform usernames (e.g., Discord, GitHub) to verify access</li>
+                <li>Purchase history, contact messages, or support requests</li>
+            </ul>
+            <p>We do not collect unnecessary or invasive personal data.</p>
+            <h2>2. What We Do With Your Data</h2>
+            <p>We use your data to:</p>
+            <ul>
+                <li>Fulfill orders and deliver digital goods or access</li>
+                <li>Verify identity and grant permissions (e.g., Discord roles)</li>
+                <li>Prevent fraud and abuse</li>
+                <li>Improve our products and services</li>
+            </ul>
+            <p>We do not:</p>
+            <ul>
+                <li>Sell your data</li>
+                <li>Spam you</li>
+                <li>Share your info with third-party advertisers</li>
+            </ul>
+            <h2>3. Security</h2>
+            <p>We take reasonable technical and organizational measures to protect your data, including:</p>
+            <ul>
+                <li>Secure checkout via trusted processors</li>
+                <li>Role-based internal access</li>
+                <li>Data minimization and retention limits</li>
+            </ul>
+            <p>No system is 100% secure, and we are not liable for third-party breaches (e.g., Discord, payment platforms).</p>
+            <h2>4. Your Rights</h2>
+            <p>You may contact us at any time to:</p>
+            <ul>
+                <li>Request a copy of your data</li>
+                <li>Request correction or deletion (subject to verification)</li>
+                <li>Revoke consent for future communications</li>
+            </ul>
+            <p>All requests must be sent to <a href="mailto:privacy@contentltd.net">privacy@contentltd.net</a> and may require identity confirmation.</p>
+            <h2>5. Third-Party Services</h2>
+            <p>We work with:</p>
+            <ul>
+                <li>Stripe, PayPal, Ko-fi (payment)</li>
+                <li>Discord (access distribution)</li>
+                <li>Cloudflare, Google Analytics (infrastructure and stats)</li>
+            </ul>
+            <p>These services have their own privacy practices we cannot control. Refer to their respective policies for details.</p>
+        </section>
+    </main>
+    <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="footer-logo">
+                </div>
+                <div class="footer-links">
+                    <div class="footer-group">
+                        <h4>Company</h4>
+                        <a href="index.html#who-we-are">About</a>
+                        <a href="https://discord.gg/P5d9CVZh">Contact</a>
+                        <a href="branding.html">Branding</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Legal</h4>
+                        <a href="legal.html">Terms</a>
+                        <a href="privacy.html">Privacy</a>
+                        <a href="copyright.html">Copyright</a>
+                    </div>
+                    <div class="footer-group">
+                        <h4>Support</h4>
+                        <a href="index.html#faq">FAQ</a>
+                        <a href="https://discord.gg/P5d9CVZh">Discord</a>
+                        <a href="docs.html">Docs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Made with <span style="color:#FF4B4B;">&#10084;&#65039;</span> by ContentLTD</p>
+                <p>&copy; 2025 ContentLTD. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <div class="loading-overlay" style="display:none;"><div class="loading-spinner"></div></div>
+    <script>
+    // Footer loading screen for internal links
+    const footerLinks = document.querySelectorAll('.footer-group a[href$=".html"]');
+    footerLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const loadingOverlay = document.querySelector('.loading-overlay');
+        loadingOverlay.style.display = 'flex';
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 700);
+      });
+    });
+    </script>
+</body>
+</html>
