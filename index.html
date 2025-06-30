@@ -112,7 +112,7 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+<nav class="navbar">
         <div class="nav-container">
             <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
             <div class="nav-links">
@@ -122,7 +122,7 @@
                 <a href="#pricing">Pricing</a>
                 <a href="#faq">FAQ</a>
                 <a href="https://discord.gg/P5d9CVZh" id="contact-navbar-btn">Contact</a>
-                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button">Join Discord</a>
+                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button pulse">Join Discord</a>
             </div>
             <button class="mobile-menu-btn" aria-label="Toggle menu">
                 <span></span>
@@ -130,6 +130,7 @@
                 <span></span>
             </button>
         </div>
+    </nav>
     </nav>
 
     <!-- Hero Section -->
@@ -166,15 +167,15 @@
     <section class="features" id="features">
         <div class="container">
             <h2>Everything You Need. Nothing You Don't.</h2>
-            <div class="features-grid">
-                <div class="feature-card">
+            <div class="features-bento-grid">
+                <div class="feature-card bento-large">
                     <div class="feature-icon">
                         <img src="assets/shield.png" alt="Shield Icon" class="feature-img">
                     </div>
                     <h3>Community Protection</h3>
                     <p>Advanced anti-raid to keep your community safe.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card bento-tall">
                     <div class="feature-icon">
                         <img src="assets/person.png" alt="Person Icon" class="feature-img">
                     </div>
@@ -195,7 +196,7 @@
                     <h3>Custom Development</h3>
                     <p>Tailored solutions for your community's unique needs.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card bento-wide">
                     <div class="feature-icon">
                         <img src="assets/clock.png" alt="Clock Icon" class="feature-img">
                     </div>
@@ -249,21 +250,23 @@
                 </ul>
                 <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn">Purchase</a>
             </div>
-            <div class="premium-pricing-card">
-                <span class="premium-badge">Most Popular</span>
-                <br>
-                <div class="pricing-header">
-                    <h3>Going under our brand</h3>
-                    <p class="price">One-time License: <strong>$0 USD</strong></p>
+<div class="pricing-card-outer">
+                <div class="price-highlight">Preferred</div><div class="premium-pricing-card most-popular">
+                    <br>
+                    <div class="pricing-header">
+                        <h3>Go under our brand</h3>
+                        <p class="price">One-time License: <strong>$0 USD</strong></p>
+                        
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
+                        <li><i class="fas fa-check-circle"></i> Free Advertising for your server by us</li>
+                        <li><i class="fas fa-check-circle"></i> Full Support &amp; Setup</li>
+                        <li><i class="fas fa-check-circle"></i> Future Updates Included</li>
+                        <li><i class="fas fa-check-circle"></i> And more!</li>
+                    </ul>
+                    <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn pulse">See More Info!</a>
                 </div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
-                    <li><i class="fas fa-check-circle"></i> Free Advertising for your server by us</li>
-                    <li><i class="fas fa-check-circle"></i> Full Support & Setup</li>
-                    <li><i class="fas fa-check-circle"></i> Future Updates Included</li>
-                    <li><i class="fas fa-check-circle"></i> And more!</li>
-                </ul>
-                <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn">See More Info!</a>
             </div>
         </div>
         </div>
@@ -367,6 +370,8 @@
         </div>
     </div>
 
+
     <script src="app.js"></script>
+    <script src="bento-animate.js"></script>
 </body>
-</html> 
+</html>
