@@ -111,36 +111,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Smooth Scrolling with Enhanced Animation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            
-            if (target) {
-                const headerOffset = 80;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetSelector = this.getAttribute('href');
+      const target = document.querySelector(targetSelector);
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
+      if (target) {
+        const headerOffset = 80;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                // Add highlight effect to target section
-                target.classList.add('highlight');
-                setTimeout(() => {
-                    target.classList.remove('highlight');
-                }, 2000);
-
-                // Close mobile menu if open
-                if (navLinks && window.innerWidth <= 768) {
-                    navLinks.style.display = 'none';
-                    mobileMenuBtn.classList.remove('active');
-                }
-            }
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
         });
+
+        // Highlight the target
+        target.classList.add('highlight');
+        setTimeout(() => {
+          target.classList.remove('highlight');
+        }, 2000);
+
+        // Attempt to close mobile menu if it exists
+        const navLinks = document.querySelector(".nav-links");
+        const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+        if (navLinks && window.innerWidth <= 768) {
+          navLinks.style.display = 'none';
+          if (mobileMenuBtn) {
+            mobileMenuBtn.classList.remove('active');
+          }
+        }
+      }
     });
+  });
+});
+
 
     // Enhanced Navbar Behavior
     const navbar = document.querySelector('.navbar');
@@ -434,3 +441,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })();
 });
+document.addEventListener("DOMContentLoaded", function() {
+  const joinDiscordLink = document.getElementById("join-discord-btn");
+  if (joinDiscordLink) {
+    joinDiscordLink.href = "https://contentltd.net/discord";
+  }
+});
+document.addEventListener("DOMContentLoaded", function() {
+  Promise.all([
+    fetch("/navbar.html").then(res => res.text()),
+    fetch("/footer.html").then(res => res.text())
+  ]).then(([navbar, footer]) => {
+    const navbarContainer = document.getElementById("navbar-container");
+    const footerContainer = document.getElementById("footer-container");
+
+    if (navbarContainer) {
+      navbarContainer.innerHTML = navbar;
+    }
+
+    if (footerContainer) {
+      footerContainer.innerHTML = footer;
+
+      // update copyright year after footer is injected
+      const yearSpan = footerContainer.querySelector("#copyright-date");
+      if (yearSpan) {
+        const currentYear = new Date().getFullYear();
+        yearSpan.textContent = `© ${currentYear} ContentLTD. All rights reserved.`;
+      }
+    }
+  });
+});
+
