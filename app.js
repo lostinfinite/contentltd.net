@@ -149,13 +149,35 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-    // Enhanced Navbar Behavior
+
+    // Enhanced Navbar Behavior: Smoother transitions and subtle shadow/blur effects
     const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 10) {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function updateNavbar() {
+        const scrollY = window.scrollY;
+        if (scrollY > 10) {
             navbar.classList.add('scrolled');
+            navbar.style.backdropFilter = 'blur(28px) saturate(200%) brightness(1.10)';
+            navbar.style.boxShadow = '0 12px 40px 0 rgba(0,0,0,0.18), 0 0 32px 0 rgba(255,255,255,0.10) inset';
+            navbar.style.background = 'rgba(34,40,49,0.60)';
+            navbar.style.borderColor = 'rgba(255,255,255,0.10)';
         } else {
             navbar.classList.remove('scrolled');
+            navbar.style.backdropFilter = 'blur(22px) saturate(180%) brightness(1.08) contrast(1.12)';
+            navbar.style.boxShadow = '';
+            navbar.style.background = '';
+            navbar.style.borderColor = '';
+        }
+        lastScrollY = scrollY;
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(updateNavbar);
+            ticking = true;
         }
     });
 
