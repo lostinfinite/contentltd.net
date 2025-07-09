@@ -3,7 +3,7 @@ const OFFENSIVE_ITEMS = {
   a: "Ima hack this fucker",
   b: "Discord DM sent on 6/17/2025 at 1:07 AM (ET)",
   c: "Discord DM sent on 6/17/2025 at 1:09 AM (ET)",
-  d: "Impersonation",
+  d: "Discord Message sent on 7/8/2025 at 11:03 PM (ET) in: The ContentLTD Brand (SM)",
   e: "Hate speech",
   f: "Personal information sharing",
   g: "Inappropriate username",
