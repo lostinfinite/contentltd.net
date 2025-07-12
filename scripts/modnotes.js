@@ -59,7 +59,9 @@ const MOD_NOTES = {
   bd: "We do not allow the posting of unapproved or disguised external links.",
   be: "We do not allow QR codes, shortened URLs, or redirects without authorization.",
   bf: "We do not allow users to drive traffic off-platform without staff approval.",
-  bg: "We do not allow users to use other accounts or methods to bypass moderation."
+  bg: "We do not allow users to use other accounts or methods to bypass moderation.",
+  bh: "We do not allow users to challenge the mods to Mario Kart for their ban appeals.",
+  bi: "We do not allow users under the age of 13 to use our services."
 };
 
 function getModNoteById(id) {
