@@ -7,3 +7,4 @@ Disallow: /scripts
 Disallow: /not-approved.html
 Disallow: /test
 Disallow: /assets
+Disallow: /banned.html
