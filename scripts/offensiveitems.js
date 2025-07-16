@@ -6,7 +6,7 @@ const OFFENSIVE_ITEMS = {
   d: "Discord Message sent on 7/8/2025 at 11:03 PM (ET) in: The ContentLTD Brand (SM)",
   e: "Best of 3 on 200cc, no blue shells, loser quits.",
   f: "Not Applicable",
-  g: "Inappropriate username",
+  g: "Ticket created on 7/15/25 at 8:47 PM (ET)",
   h: "Exploiting or cheating",
   i: "Scamming",
   j: "Other violation",
