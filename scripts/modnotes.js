@@ -61,7 +61,8 @@ const MOD_NOTES = {
   bf: "We do not allow users to drive traffic off-platform without staff approval.",
   bg: "We do not allow users to use other accounts or methods to bypass moderation.",
   bh: "We do not allow users to challenge the mods to Mario Kart for their ban appeals.",
-  bi: "We do not allow users under the age of 13 to use our services."
+  bi: "We do not allow users under the age of 13 to use our services.",
+  bj: "We do not allow users to threaten civil or legal action against the platform or its staff."
 };
 
 function getModNoteById(id) {
