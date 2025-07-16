@@ -1,3 +1,9 @@
 User-agent: *
 Disallow: /navbar.html
 Disallow: /footer.html
+Disallow: /banned
+Disallow: /staff
+Disallow: /scripts
+Disallow: /not-approved.html
+Disallow: /test
+Disallow: /assets
