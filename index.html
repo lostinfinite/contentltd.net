@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="/scripts/ban-checker.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>contentltd - Professional Anti-Raid Bot for ER:LC</title>
@@ -8,28 +9,114 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+<script>
+  const blockedCountries = [
+    "North Korea",
+    "Russia",
+    "Ukraine",
+    "United Arab Emirates",
+    "Israel"
+  ];
+
+  const vpnBypassKey = "vpnBypassTimestamp";
+
+  // Known VPN/Proxy/Hosting ISPs (add more as needed)
+  const knownVPNISPs = [
+    "packethub",
+    "m247",
+    "ovh",
+    "digitalocean",
+    "nforce",
+    "hostkey",
+    "contabo",
+    "amazon",
+    "google cloud",
+    "microsoft",
+    "data packet",
+    "linode",
+    "vultr",
+    "cloud",
+    "colo",
+    "proxy",
+    "vpn",
+    "M247 Europe",
+    "m247 europe",
+    "m247 europe ltd"
+  ];
+
+  // Check URL for ?ipwarn=false
+  function urlHasBypassFlag() {
+    return new URLSearchParams(window.location.search).get("ipwarn") === "false";
+  }
+
+  // Validate 24hr bypass
+  function hasValidBypass() {
+    const timestamp = localStorage.getItem(vpnBypassKey);
+    if (!timestamp) return false;
+    return (Date.now() - parseInt(timestamp)) < 24 * 60 * 60 * 1000;
+  }
+
+  // Store bypass
+  function saveBypassTimestamp() {
+    localStorage.setItem(vpnBypassKey, Date.now().toString());
+  }
+
+  // Remove query string from URL
+  function stripBypassQuery() {
+    const cleanURL = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, "", cleanURL);
+  }
+
+  // Setup
+  if (urlHasBypassFlag()) {
+    saveBypassTimestamp();
+    stripBypassQuery();
+  }
+
+  // Only run VPN/country check if bypass is NOT active
+  if (!hasValidBypass()) {
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        const country = (data.country_name || "").trim();
+        const isp = (data.org || "").toLowerCase();
+
+        if (!country || !isp) {
+          window.location.href = "not-approved.html?o=nip";
+          return;
+        }
+
+        // Country block
+        if (blockedCountries.includes(country)) {
+          window.location.href = "not-approved.html?c";
+          return;
+        }
+
+        // ISP-based VPN detection
+        for (const keyword of knownVPNISPs) {
+          if (isp.includes(keyword)) {
+            console.warn("🚫 VPN Detected via ISP:", isp);
+            window.location.href = "not-approved.html?ipw";
+            return;
+          }
+        }
+
+        console.log("✅ Access granted:", country, "-", isp);
+      })
+      .catch(err => {
+        console.error("GeoIP lookup failed:", err);
+        window.location.href = "not-approved.html?o=nip";
+      });
+  } else {
+    console.log("✅ VPN bypass active for this session.");
+  }
+</script>
+
+
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
-            <div class="nav-links">
-                <a href="#who-we-are">About</a>
-                <a href="#features">Services</a>
-                <a href="#ltdqsuite">Content Solutions (SM)</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#faq">FAQ</a>
-                <a href="https://discord.gg/P5d9CVZh" id="contact-navbar-btn">Contact</a>
-                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button">Join Discord</a>
-            </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+<div id="navbar-container"></div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -65,15 +152,15 @@
     <section class="features" id="features">
         <div class="container">
             <h2>Everything You Need. Nothing You Don't.</h2>
-            <div class="features-grid">
-                <div class="feature-card">
+            <div class="features-bento-grid">
+                <div class="feature-card bento-large">
                     <div class="feature-icon">
                         <img src="assets/shield.png" alt="Shield Icon" class="feature-img">
                     </div>
                     <h3>Community Protection</h3>
                     <p>Advanced anti-raid to keep your community safe.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card bento-tall">
                     <div class="feature-icon">
                         <img src="assets/person.png" alt="Person Icon" class="feature-img">
                     </div>
@@ -94,7 +181,7 @@
                     <h3>Custom Development</h3>
                     <p>Tailored solutions for your community's unique needs.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card bento-wide">
                     <div class="feature-icon">
                         <img src="assets/clock.png" alt="Clock Icon" class="feature-img">
                     </div>
@@ -148,21 +235,23 @@
                 </ul>
                 <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn">Purchase</a>
             </div>
-            <div class="premium-pricing-card">
-                <span class="premium-badge">Most Popular</span>
-                <br>
-                <div class="pricing-header">
-                    <h3>Going under our brand</h3>
-                    <p class="price">One-time License: <strong>$0 USD</strong></p>
+<div class="pricing-card-outer">
+                <div class="price-highlight">Preferred</div><div class="premium-pricing-card most-popular">
+                    <br>
+                    <div class="pricing-header">
+                        <h3>Go under our brand</h3>
+                        <p class="price">One-time License: <strong>$0 USD</strong></p>
+                        
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
+                        <li><i class="fas fa-check-circle"></i> Free Advertising for your server by us</li>
+                        <li><i class="fas fa-check-circle"></i> Full Support &amp; Setup</li>
+                        <li><i class="fas fa-check-circle"></i> Future Updates Included</li>
+                        <li><i class="fas fa-check-circle"></i> And more!</li>
+                    </ul>
+                    <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn pulse">See More Info!</a>
                 </div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
-                    <li><i class="fas fa-check-circle"></i> Free Advertising for your server by us</li>
-                    <li><i class="fas fa-check-circle"></i> Full Support & Setup</li>
-                    <li><i class="fas fa-check-circle"></i> Future Updates Included</li>
-                    <li><i class="fas fa-check-circle"></i> And more!</li>
-                </ul>
-                <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn">See More Info!</a>
             </div>
         </div>
         </div>
@@ -226,38 +315,8 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="footer-logo">
-                </div>
-                <div class="footer-links">
-                    <div class="footer-group">
-                        <h4>Company</h4>
-                        <a href="#who-we-are">About</a>
-                        <a href="https://discord.gg/P5d9CVZh">Contact</a>
-                        <a href="branding.html">Branding</a>
-                    </div>
-                    <div class="footer-group">
-                        <h4>Legal</h4>
-                        <a href="terms.html">Terms</a>
-                        <a href="privacy.html">Privacy</a>
-                        <a href="copyright.html">Copyright</a>
-                    </div>
-                    <div class="footer-group">
-                        <h4>Support</h4>
-                        <a href="#faq">FAQ</a>
-                        <a href="https://discord.gg/P5d9CVZh">Discord</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>Made with <span style="color:#FF4B4B;">&#10084;&#65039;</span> by ContentLTD</p>
-                <p>&copy; 2025 ContentLTD. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+<div id="footer-container"></div>
+
 
     <!-- Redirect Modal -->
     <div id="redirect-modal" class="redirect-modal" style="display:none;">
@@ -266,6 +325,8 @@
         </div>
     </div>
 
+
     <script src="app.js"></script>
+    <script src="bento-animate.js"></script>
 </body>
-</html> 
+</html>

@@ -12,6 +12,62 @@
     <link rel="icon" href="assets/contentltd_white.webp">
 </head>
 <body>
-
+    <script src="app.js"></script>
+    <script>
+(function() {
+    if (window.top !== window.self) return;
+    let isAnimating = false;
+    let targetScroll = window.scrollY;
+    let lastScroll = window.scrollY;
+    let rafId = null;
+    const ease = 0.12;
+    function animateScroll() {
+        lastScroll += (targetScroll - lastScroll) * ease;
+        if (Math.abs(targetScroll - lastScroll) < 0.5) lastScroll = targetScroll;
+        window.scrollTo(0, lastScroll);
+        if (Math.abs(targetScroll - lastScroll) > 0.5) {
+            rafId = requestAnimationFrame(animateScroll);
+        } else {
+            isAnimating = false;
+            rafId = null;
+        }
+    }
+    function startSmoothScroll(deltaY) {
+        targetScroll += deltaY;
+        targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
+        if (!isAnimating) {
+            isAnimating = true;
+            animateScroll();
+        }
+    }
+    if (!window.__liquidGlassScroll) {
+        window.__liquidGlassScroll = true;
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            startSmoothScroll(e.deltaY);
+        }, { passive: false });
+        let touchStartY = 0;
+        let scrollStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                touchStartY = e.touches[0].clientY;
+                scrollStartY = targetScroll;
+            }
+        }, { passive: false });
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                e.preventDefault();
+                const delta = touchStartY - e.touches[0].clientY;
+                targetScroll = scrollStartY + delta;
+                targetScroll = Math.max(0, Math.min(targetScroll, document.body.scrollHeight - window.innerHeight));
+                if (!isAnimating) {
+                    isAnimating = true;
+                    animateScroll();
+                }
+            }
+        }, { passive: false });
+    }
+})();
+</script>
 </body>
-</html> 
+</html>

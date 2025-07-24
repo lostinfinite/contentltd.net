@@ -1,0 +1,51 @@
+<html lang="en"><head>
+<link rel="stylesheet" href="/styles/banned-styles.css">
+<script src="/scripts/offensiveitems.js"></script>
+<script src="/scripts/modnotes.js"></script>
+<script src="/scripts/roblox-ban-dynamic.js"></script>
+</head>
+<body class="cltd-body   dark-theme">
+<div id="wrap" class="wrap">
+    <main class="container-main">
+        <div class="content" id="content">
+ <div class="not-approved-page-web-app-root"><div class="not-approved-content-container"><div class="not-approved-title" "main-page-title"="">Permanently Banned</div><div class="not-approved-info-section"><div><div class="page-item-config-wrapper"><p></p><div "terms-of-use"="">Our moderators have determined that your behavior on ContentLTD or in affiliated servers violates our <a href="/terms.html" class="not-approved-text-link" target="_blank" rel="noreferrer">Terms of Service</a>.</div><p></p></div><div class="page-item-config-wrapper"><p></p><p>Recent Violation:</p><p></p></div><div class="page-item-config-recent-violation-wrapper"><div class="page-item-config-wrapper"><p></p><div class="start-date">Reviewed: <b>{date}</b></div><p></p></div><div class="page-item-config-wrapper"><p></p><div class="moderator-note">Moderator Note: <b>{modnot}</b></div><p></p></div><div class="page-item-config-wrapper"><p></p><div "bad-utterances"="" class="not-approved-punishment-details"><div class="not-approved-punishment-details-item"><p class="not-approved-punishment-details-item-row reason-thingy">Reason: <strong>{reason}</strong></p><p class="not-approved-punishment-details-item-row offensive-thingly">Offensive Item: <strong>{offensive item}</strong></p></div><br></div><p></p></div></div><div class="page-item-config-wrapper"><p></p><div "community-standards"="">Please abide by the <a href="/community-standards.html" class="not-approved-text-link" target="_blank" rel="noreferrer">Community Standards</a> so that ContentLTD remains a safe and enjoyable environment for all users.</div><p></p></div><div class="page-item-config-wrapper"><p></p><div "delete-description"="">You may not use ContentLTD services on this account or any other account.</div><p></p></div><div class="page-item-config-wrapper" style="display:none;"><p></p><div id="ban-fingerprint" "ban-fingerprint"="">Ban ID: <b id="banid-val"></b></div><p></p></div><div class="page-item-config-wrapper"><p></p><div "appeals-notice"="">To request an appeal visit <a href="/support.html" class="not-approved-text-link" target="_blank" rel="noreferrer">our Support Form</a>.</div><p></p></div></div></div><div class="not-approved-action-section"><div class="not-approved-action-section-children" "logout-button"=""><button type="button" onclick="window.location.href='https://google.com';" class="enable-three-dee btn-control btn-control-md btn--width">Exit</button></div></div></div></div>
+        </div>
+    </main>
+
+</div>
+<script>
+(function() {
+  // If arriving from banned.html?params, store params in a cookie for later use
+  var loc = window.location;
+  if (loc.pathname.endsWith('banned.html') && loc.search.length > 0) {
+    try {
+      document.cookie = 'cltd_banparams=' + encodeURIComponent(loc.search.substring(1)) + '; path=/; max-age=31536000';
+    } catch(e) {}
+  }
+
+  // Use the full URL (path+search+hash) as the unique key for this ban
+  var banKey = loc.pathname + loc.search + loc.hash;
+  // Remove leading slash for key
+  if (banKey.charAt(0) === '/') banKey = banKey.substring(1);
+  var cookieKey = 'cltd_banid_' + encodeURIComponent(banKey);
+
+  // Generate or retrieve a unique Ban ID for this ban (per ban URL, persistent across tabs)
+  function getOrCreateBanIdForKey(key) {
+    // Try to get from cookie first
+    var match = document.cookie.match(new RegExp('(?:^|; )' + key.replace(/[-.]/g, '\$&') + '=([^;]*)'));
+    if (match) return decodeURIComponent(match[1]);
+    // Otherwise, generate a new one
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var id = '';
+    for (var i = 0; i < 16; i++) id += chars.charAt(Math.floor(Math.random() * chars.length));
+    // Plant cookie for this ban
+    try { document.cookie = key + '=' + encodeURIComponent(id) + '; path=/; max-age=31536000'; } catch(e) {}
+    return id;
+  }
+  var banid = getOrCreateBanIdForKey(cookieKey);
+  // Display the Ban ID
+  var el = document.getElementById('banid-val');
+  if (el) el.textContent = banid;
+})();
+</script>
+</body></html>
