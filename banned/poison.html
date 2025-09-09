@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Denied | ContentLTD</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #1d1d1d;
+      color: #FFF;
+      font-family: 'Inter', Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .access-main {
+      max-width: 600px;
+      margin: 80px auto 32px auto;
+      padding: 0 1.2rem;
+      text-align: center;
+    }
+    .access-title {
+      color: #FFBB00;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.01em;
+    }
+    .access-message {
+      font-size: 1.18rem;
+      color: #FFF;
+      margin-bottom: 2.5rem;
+    }
+    .access-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.2rem;
+      color: #FFBB00;
+      user-select: none;
+    }
+    @media (max-width: 700px) {
+      .access-main { margin: 40px auto 16px auto; }
+      .access-title { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <main class="access-main">
+    <div class="access-icon">&#9888;</div>
+    <h1 class="access-title">Access Denied</h1>
+    <div class="access-message">
+      <b>This account, device, or browser has been flagged for a serious violation.</b><br><br>
+      For the safety and integrity of our community, access to ContentLTD is no longer permitted from this device.<br><br>
+      If you believe this is an error, you may <a href="/support.html" style="color:#FFBB00;text-decoration:underline;">contact support</a> for further review. Please note: attempts to bypass this restriction may result in additional action.<br><br>
+      <span style="color:#bcbec8;font-size:0.98rem;">This restriction is permanent.</span>
+    </div>
+  </main>
+  <div id="footer-container"></div>
+  <script src="/app.js"></script>
+  <script>
+    // Set a persistent, hard-to-remove poison ban cookie
+    (function() {
+      var cookieName = 'poison_ban';
+      var cookieValue = '1';
+      var expiry = new Date('2099-12-31T23:59:59Z').toUTCString();
+      document.cookie = cookieName + '=' + cookieValue + '; expires=' + expiry + '; path=/; SameSite=Strict';
+    })();
+  </script>
+</body>
+</html>

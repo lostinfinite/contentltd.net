@@ -1,6 +1,27 @@
+<script>
+// Console override for custom log format
+(function() {
+    var origError = console.error;
+    var origInfo = console.info;
+    var origDebug = console.debug;
+    console.error = function(...args) {
+        origError.call(console, '[Error] -', ...args);
+    };
+    console.info = function(...args) {
+        origInfo.call(console, '[Info] -', ...args);
+    };
+    console.debug = function(...args) {
+        origDebug.call(console, '[Debug] -', ...args);
+    };
+    window.logElementChange = function(element, before, after) {
+        origInfo.call(console, '[Element Change] -', {element, before, after});
+    };
+})();
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="/scripts/ban-checker.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>contentltd - Professional Anti-Raid Bot for ER:LC</title>
@@ -8,28 +29,303 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+<script>
+  const blockedCountries = [
+    "North Korea",
+    "Russia",
+    "Ukraine",
+    "United Arab Emirates",
+    "Israel"
+  ];
+
+  const vpnBypassKey = "vpnBypassTimestamp";
+
+  // Known VPN/Proxy/Hosting ISPs (add more as needed)
+  const knownVPNISPs = [
+    "packethub",
+    "m247",
+    "ovh",
+    "digitalocean",
+    "nforce",
+    "hostkey",
+    "contabo",
+    "amazon",
+    "google cloud",
+    "microsoft",
+    "data packet",
+    "linode",
+    "vultr",
+    "cloud",
+    "colo",
+    "proxy",
+    "vpn",
+    "M247 Europe",
+    "m247 europe",
+    "m247 europe ltd"
+  ];
+
+  // Check URL for ?ipwarn=false
+  function urlHasBypassFlag() {
+    return new URLSearchParams(window.location.search).get("ipwarn") === "false";
+  }
+
+  // Validate 24hr bypass
+  function hasValidBypass() {
+    const timestamp = localStorage.getItem(vpnBypassKey);
+    if (!timestamp) return false;
+    return (Date.now() - parseInt(timestamp)) < 24 * 60 * 60 * 1000;
+  }
+
+  // Store bypass
+  function saveBypassTimestamp() {
+    localStorage.setItem(vpnBypassKey, Date.now().toString());
+  }
+
+  // Remove query string from URL
+  function stripBypassQuery() {
+    const cleanURL = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, "", cleanURL);
+  }
+
+  // Setup
+  if (urlHasBypassFlag()) {
+    saveBypassTimestamp();
+    stripBypassQuery();
+  }
+
+  // Only run VPN/country check if bypass is NOT active
+  if (!hasValidBypass()) {
+    fetch("https://ipapi.co/json/")
+      .then(res => res.json())
+      .then(data => {
+        const country = (data.country_name || "").trim();
+        const isp = (data.org || "").toLowerCase();
+
+        if (!country || !isp) {
+          window.location.href = "not-approved.html?o=nip";
+          return;
+        }
+
+        // Country block
+        if (blockedCountries.includes(country)) {
+          window.location.href = "not-approved.html?c";
+          return;
+        }
+
+        // ISP-based VPN detection
+        for (const keyword of knownVPNISPs) {
+          if (isp.includes(keyword)) {
+            console.warn("🚫 VPN Detected via ISP:", isp);
+            window.location.href = "not-approved.html?ipw";
+            return;
+          }
+        }
+
+        console.log("✅ Access granted:", country, "-", isp);
+      })
+      .catch(err => {
+        console.error("GeoIP lookup failed:", err);
+        window.location.href = "not-approved.html?o=nip";
+      });
+  } else {
+    console.log("✅ VPN bypass active for this session.");
+  }
+</script>
+
+
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="logo-img">
-            <div class="nav-links">
-                <a href="#who-we-are">About</a>
-                <a href="#features">Services</a>
-                <a href="#ltdqsuite">Content Solutions (SM)</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#faq">FAQ</a>
-                <a href="https://discord.gg/P5d9CVZh" id="contact-navbar-btn">Contact</a>
-                <a href="https://discord.gg/P5d9CVZh" id="join-discord-btn" class="cta-button">Join Discord</a>
+        <!-- Navigation -->
+<div id="navbar-container"></div>
+
+        <!-- Liquid Glass Mudflap Announcement -->
+    <div id="mudflap-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:1020; width:100%; transition:all 0.35s cubic-bezier(.4,1.6,.4,1);">
+            <div id="mudflap-inner" style="
+                margin:0 auto; max-width:900px; border-radius:22px 22px 0 0; background:rgba(29,29,29,0.82); box-shadow:0 -8px 32px 0 rgba(0,0,0,0.18), 0 -1.5px 16px 0 rgba(255,187,0,0.08); backdrop-filter:blur(12px) saturate(1.2); border:1.5px solid rgba(255,187,0,0.18); border-bottom:none; padding:1.2rem 2.2rem; color:#fff; font-family:'Inter',Arial,sans-serif; font-size:1.13rem; margin-bottom:0; text-align:center; position:relative; transition:box-shadow 0.35s;">
+                <button id="mudflap-close" style="display:none; position:absolute; top:12px; left:12px; background:none; border:none; color:#FFBB00; font-size:1.7rem; font-weight:700; cursor:pointer; z-index:10;">&times;</button>
+                <span style="font-weight:600; color:#FFBB00;">Notice:</span> The ContentLTD Brand will be sunsetting on <b>9/16/2025</b>. See <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more info.
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
-    </nav>
+            <style>
+                                .mudflap-modal {
+                                    position:fixed !important;
+                                    top:0; left:0; right:0; bottom:0;
+                                    width:100vw; height:100vh;
+                                    background:rgba(0,0,0,0.32);
+                                    z-index:1020;
+                                    display:flex; align-items:center; justify-content:center;
+                                    opacity: 0;
+                                    pointer-events: none;
+                                    transition: opacity 0.35s cubic-bezier(.4,1.6,.4,1), background 0.3s;
+                                }
+                                .mudflap-modal.mudflap-animate-in {
+                                    opacity: 1;
+                                    pointer-events: auto;
+                                }
+                                .mudflap-modal #mudflap-inner {
+                                    border-radius:22px;
+                                    box-shadow:0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 16px 0 rgba(255,187,0,0.08);
+                                    border-bottom:1.5px solid rgba(255,187,0,0.18);
+                                    border-top:none;
+                                    margin-bottom:0;
+                                    background:rgba(29,29,29,0.97);
+                                    max-width:95vw;
+                                    transform: translateY(80vh);
+                                    opacity: 0;
+                                    transition: transform 0.5s cubic-bezier(.4,1.6,.4,1), opacity 0.35s cubic-bezier(.4,1.6,.4,1);
+                                }
+                                .mudflap-modal.mudflap-animate-in #mudflap-inner {
+                                    transform: translateY(0);
+                                    opacity: 1;
+                                }
+                                .mudflap-modal.mudflap-animate-out #mudflap-inner {
+                                    transform: translateY(80vh);
+                                    opacity: 0;
+                                }
+            </style>
+        <script>
+                    // Mudflap popup/modal logic for CTA buttons with smooth drag animation
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var mudflapBanner = document.getElementById('mudflap-banner');
+                        var mudflapInner = document.getElementById('mudflap-inner');
+                        var mudflapClose = document.getElementById('mudflap-close');
+                        var modalOverlay = null;
+                        // Helper to show mudflap as modal with animation
+                                function showMudflapModal() {
+                                    if (!modalOverlay) {
+                                        modalOverlay = document.createElement('div');
+                                        modalOverlay.className = 'mudflap-modal';
+                                        modalOverlay.appendChild(mudflapBanner);
+                                        document.body.appendChild(modalOverlay);
+                                        // Animate in
+                                        setTimeout(function() {
+                                            modalOverlay.classList.add('mudflap-animate-in');
+                                        }, 10);
+                                    }
+                                    mudflapBanner.style.position = 'static';
+                                    mudflapBanner.style.bottom = '';
+                                    mudflapBanner.style.left = '';
+                                    mudflapBanner.style.right = '';
+                                    mudflapBanner.style.width = 'auto';
+                                    mudflapBanner.style.zIndex = '1020';
+                                    mudflapInner.style.borderRadius = '22px';
+                                    mudflapInner.style.boxShadow = '0 8px 32px 0 rgba(0,0,0,0.18), 0 1.5px 16px 0 rgba(255,187,0,0.08)';
+                                    mudflapInner.style.borderBottom = '1.5px solid rgba(255,187,0,0.18)';
+                                    mudflapInner.style.borderTop = 'none';
+                                    mudflapClose.style.display = '';
+                                }
+                                // Helper to hide modal and return mudflap to bottom with animation
+                                                        function hideMudflapModal() {
+                                                            if (modalOverlay && mudflapBanner) {
+                                                                // Animate out
+                                                                modalOverlay.classList.remove('mudflap-animate-in');
+                                                                modalOverlay.classList.add('mudflap-animate-out');
+                                                                var mudflapInnerEl = mudflapInner;
+                                                                var cleanedUp = false;
+                                                                function cleanupMudflap() {
+                                                                    if (cleanedUp) return;
+                                                                    cleanedUp = true;
+                                                                    modalOverlay.classList.remove('mudflap-animate-out');
+                                                                    mudflapBanner.classList.remove('mudflap-animate-out');
+                                                                    document.body.appendChild(mudflapBanner);
+                                                                    modalOverlay.remove();
+                                                                    modalOverlay = null;
+                                                                    void mudflapBanner.offsetWidth;
+                                                                    mudflapBanner.style.position = 'fixed';
+                                                                    mudflapBanner.style.bottom = '0';
+                                                                    mudflapBanner.style.left = '0';
+                                                                    mudflapBanner.style.right = '0';
+                                                                    mudflapBanner.style.width = '100%';
+                                                                    mudflapBanner.style.zIndex = '1020';
+                                                                    mudflapBanner.style.display = '';
+                                                                    mudflapInner.style.borderRadius = '22px 22px 0 0';
+                                                                    mudflapInner.style.boxShadow = '0 -8px 32px 0 rgba(0,0,0,0.18), 0 -1.5px 16px 0 rgba(255,187,0,0.08)';
+                                                                    mudflapInner.style.borderBottom = 'none';
+                                                                    mudflapInner.style.borderTop = '';
+                                                                    mudflapInner.style.transform = '';
+                                                                    mudflapInner.style.opacity = '';
+                                                                    mudflapClose.style.display = 'none';
+                                                                }
+                                                                // Listen for the end of the transform transition on the mudflap content
+                                                                var onTransitionEnd = function(e) {
+                                                                    if (e.propertyName === 'transform') {
+                                                                        mudflapInnerEl.removeEventListener('transitionend', onTransitionEnd);
+                                                                        cleanupMudflap();
+                                                                    }
+                                                                };
+                                                                mudflapInnerEl.addEventListener('transitionend', onTransitionEnd);
+                                                                // Fallback: always cleanup after 700ms in case transitionend doesn't fire
+                                                                setTimeout(cleanupMudflap, 700);
+                                                            }
+                                                        }
+                        // Attach to all CTA buttons
+                        document.querySelectorAll('.cta-button').forEach(function(btn) {
+                            btn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                showMudflapModal();
+                            });
+                        });
+                        // Close X handler
+                        if (mudflapClose) {
+                            mudflapClose.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                hideMudflapModal();
+                            });
+                        }
+                    });
+        </script>
+
+<script>
+
+(function() {
+    var today = new Date();
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var dd = String(today.getDate()).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    var current = yyyy + '-' + mm + '-' + dd;
+    var sunsetDate = '2025-09-16';
+    var testDate = '2025-09-16';
+
+        function showMudflapOverride() {
+                document.body.innerHTML = '';
+                var mudflap = document.createElement('div');
+                mudflap.style = 'min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#1d1d1d;font-family:Inter,Arial,sans-serif;color:#fff;';
+                var isPast = current >= sunsetDate;
+                var tenseTitle = isPast ? 'ContentLTD Has Sunsetted' : 'ContentLTD Is Sunsetting';
+                var tenseMsg = isPast
+                    ? 'ContentLTD sunsetted on <b>9/16/2025</b>. Please see <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more information.<br><br>Thank you for your support!'
+                    : 'ContentLTD will sunset on <b>9/16/2025</b>. Please see <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more information.<br><br>Thank you for your support!';
+                mudflap.innerHTML = `
+                        <div style="max-width:600px;width:100%;margin:0 auto;padding:2.5rem 1.2rem 1.2rem 1.2rem;text-align:center;">
+                            <div style="font-size:2.2rem;font-weight:700;color:#FFBB00;margin-bottom:1.2rem;">${tenseTitle}</div>
+                            <div style="font-size:1.18rem;margin-bottom:2.2rem;">${tenseMsg}</div>
+                        </div>
+                        <div id='footer-container'></div>
+                `;
+                document.body.appendChild(mudflap);
+                // Re-inject footer
+                var script = document.createElement('script');
+                script.src = '/app.js';
+                document.body.appendChild(script);
+        }
+
+    if (current === testDate || current >= sunsetDate) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', showMudflapOverride);
+        } else {
+            showMudflapOverride();
+        }
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            var mudflapBanner = document.getElementById('mudflap-banner');
+            if (current < sunsetDate && mudflapBanner) {
+                mudflapBanner.style.display = '';
+            }
+        });
+    }
+})();
+</script>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -65,15 +361,15 @@
     <section class="features" id="features">
         <div class="container">
             <h2>Everything You Need. Nothing You Don't.</h2>
-            <div class="features-grid">
-                <div class="feature-card">
+            <div class="features-bento-grid">
+                <div class="feature-card bento-large">
                     <div class="feature-icon">
                         <img src="assets/shield.png" alt="Shield Icon" class="feature-img">
                     </div>
                     <h3>Community Protection</h3>
                     <p>Advanced anti-raid to keep your community safe.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card bento-tall">
                     <div class="feature-icon">
                         <img src="assets/person.png" alt="Person Icon" class="feature-img">
                     </div>
@@ -94,7 +390,7 @@
                     <h3>Custom Development</h3>
                     <p>Tailored solutions for your community's unique needs.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card bento-wide">
                     <div class="feature-icon">
                         <img src="assets/clock.png" alt="Clock Icon" class="feature-img">
                     </div>
@@ -148,21 +444,23 @@
                 </ul>
                 <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn">Purchase</a>
             </div>
-            <div class="premium-pricing-card">
-                <span class="premium-badge">Most Popular</span>
-                <br>
-                <div class="pricing-header">
-                    <h3>Going under our brand</h3>
-                    <p class="price">One-time License: <strong>$0 USD</strong></p>
+<div class="pricing-card-outer">
+                <div class="price-highlight">Preferred</div><div class="premium-pricing-card most-popular">
+                    <br>
+                    <div class="pricing-header">
+                        <h3>Go under our brand</h3>
+                        <p class="price">One-time License: <strong>$0 USD</strong></p>
+                        
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
+                        <li><i class="fas fa-check-circle"></i> Free Advertising for your server by us</li>
+                        <li><i class="fas fa-check-circle"></i> Full Support &amp; Setup</li>
+                        <li><i class="fas fa-check-circle"></i> Future Updates Included</li>
+                        <li><i class="fas fa-check-circle"></i> And more!</li>
+                    </ul>
+                    <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn pulse">See More Info!</a>
                 </div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
-                    <li><i class="fas fa-check-circle"></i> Free Advertising for your server by us</li>
-                    <li><i class="fas fa-check-circle"></i> Full Support & Setup</li>
-                    <li><i class="fas fa-check-circle"></i> Future Updates Included</li>
-                    <li><i class="fas fa-check-circle"></i> And more!</li>
-                </ul>
-                <a href="https://discord.gg/P5d9CVZh" class="cta-button premium-purchase-btn">See More Info!</a>
             </div>
         </div>
         </div>
@@ -226,38 +524,8 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="assets/contentltd_white.webp" alt="ContentLTD Brand Logo" class="footer-logo">
-                </div>
-                <div class="footer-links">
-                    <div class="footer-group">
-                        <h4>Company</h4>
-                        <a href="#who-we-are">About</a>
-                        <a href="https://discord.gg/P5d9CVZh">Contact</a>
-                        <a href="branding.html">Branding</a>
-                    </div>
-                    <div class="footer-group">
-                        <h4>Legal</h4>
-                        <a href="terms.html">Terms</a>
-                        <a href="privacy.html">Privacy</a>
-                        <a href="copyright.html">Copyright</a>
-                    </div>
-                    <div class="footer-group">
-                        <h4>Support</h4>
-                        <a href="#faq">FAQ</a>
-                        <a href="https://discord.gg/P5d9CVZh">Discord</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>Made with <span style="color:#FF4B4B;">&#10084;&#65039;</span> by ContentLTD</p>
-                <p>&copy; 2025 ContentLTD. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+<div id="footer-container"></div>
+
 
     <!-- Redirect Modal -->
     <div id="redirect-modal" class="redirect-modal" style="display:none;">
@@ -266,6 +534,8 @@
         </div>
     </div>
 
+
     <script src="app.js"></script>
+    <script src="bento-animate.js"></script>
 </body>
-</html> 
+</html>

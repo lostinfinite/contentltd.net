@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ContentLTD Profile</title>
+	<link rel="stylesheet" href="/styles.css">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+	<style>
+		body {
+			background: #fffbe7;
+			color: #000;
+			font-family: 'Inter', Arial, Helvetica, sans-serif;
+			margin: 0;
+			padding: 0;
+			transition: background 0.3s, color 0.3s;
+		}
+		*, *::before, *::after { color: inherit !important; }
+		.profile-banner {
+			width: 100vw;
+			background: #fff7d3;
+			padding: 48px 0 32px 0;
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			border-bottom: 1.5px solid #ffe6a3;
+			min-height: 180px;
+			transition: background 0.3s, border-bottom 0.3s;
+		}
+		.profile-pfp {
+			width: 96px;
+			height: 96px;
+			border-radius: 12px;
+			object-fit: cover;
+			border: 3px solid #FFBB00;
+			background: #fff;
+			margin-right: 32px;
+			flex-shrink: 0;
+			box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+			transition: box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.22s cubic-bezier(.4,2,.6,1);
+		}
+		.profile-header-main {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			min-width: 0;
+		}
+		.profile-display {
+			font-size: 2.1rem;
+			font-weight: 700;
+			color: #23233a;
+			margin-bottom: 0.2rem;
+		}
+		.profile-username {
+			font-size: 1.08rem;
+			color: #bfa800;
+			margin-bottom: 1.1rem;
+		}
+		.profile-badges {
+			margin-bottom: 1.1rem;
+		}
+		.profile-badge {
+			display: inline-block;
+			background: #fffbe7;
+			color: #FFBB00;
+			border-radius: 12px;
+			padding: 0.22em 0.8em;
+			font-size: 0.98rem;
+			font-weight: 600;
+			margin: 0 0.18em 0.18em 0;
+			border: 1.2px solid #FFBB00;
+			cursor: pointer;
+			transition: transform 0.18s cubic-bezier(.4,2,.6,1), box-shadow 0.18s cubic-bezier(.4,2,.6,1), background 0.18s;
+		}
+		.profile-badge:hover, .profile-badge:focus {
+			background: #FFBB00;
+			color: #fff;
+			transform: scale(1.08) translateY(-2px);
+			box-shadow: 0 4px 18px 0 rgba(255,187,0,0.13);
+		}
+		.profile-badge:active {
+			transform: scale(0.97) translateY(1px);
+			box-shadow: 0 1px 4px 0 rgba(255,187,0,0.10);
+		}
+		.profile-stats {
+			display: flex;
+			gap: 2.5rem;
+			margin-top: 0.7rem;
+			font-size: 1.01rem;
+			color: #23233a;
+			transition: box-shadow 0.18s, transform 0.18s;
+		}
+		.profile-stats > div {
+			border-radius: 10px;
+			padding: 0.3em 1.1em;
+			transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+		}
+		.profile-stats > div:hover, .profile-stats > div:focus {
+			background: #fffbe7;
+			box-shadow: 0 2px 10px 0 rgba(35,35,58,0.07);
+			transform: scale(1.04) translateY(-2px);
+		}
+		.profile-stat-label {
+			color: #bfa800;
+			font-size: 0.97rem;
+			margin-bottom: 0.1rem;
+		}
+		.profile-stat-value {
+			font-weight: 600;
+			color: #23233a;
+		}
+		.profile-about-section {
+			max-width: 700px;
+			margin: 36px auto 0 auto;
+			padding: 0 1.2rem;
+		}
+		.profile-about {
+			font-size: 1.13rem;
+			color: #23233a;
+			margin-bottom: 1.3rem;
+		}
+		.profile-socials {
+			margin-top: 1.1rem;
+		}
+		.profile-socials a {
+			color: #FFBB00;
+			margin: 0 0.5em;
+			font-size: 1.3rem;
+			text-decoration: none;
+			transition: color 0.18s;
+		}
+		.profile-socials a:hover {
+			color: #23233a;
+		}
+		#theme-toggle {
+			position: fixed;
+			bottom: 24px;
+			right: 24px;
+			z-index: 1000;
+		}
+		#toggle-btn {
+			background: #FFBB00;
+			color: #23233a;
+			border: none;
+			border-radius: 50%;
+			width: 48px;
+			height: 48px;
+			box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+			font-size: 1.5rem;
+			cursor: pointer;
+			transition: background 0.2s;
+		}
+		@media (max-width: 900px) {
+			.profile-banner { flex-direction: column; align-items: center; padding: 32px 0 18px 0; }
+			.profile-pfp { margin-right: 0; margin-bottom: 18px; }
+			.profile-header-main { align-items: center; }
+			.profile-stats { flex-direction: column; gap: 0.7rem; align-items: center; }
+		}
+	</style>
+</head>
+<body>
+	<div class="profile-banner">
+		<img src="https://cdn.contentltd.xyz/pfp.png" alt="ContentLTD PFP" class="profile-pfp">
+		<div class="profile-header-main">
+			<div class="profile-display">ContentLTD</div>
+			<div class="profile-username">@contentltd</div>
+			<div class="profile-badges">
+				<span class="profile-badge">Founder</span>
+				<span class="profile-badge">Verified</span>
+			</div>
+			<div class="profile-stats">
+				<div><div class="profile-stat-label">Profile Type</div><div class="profile-stat-value">Personal</div></div>
+				<div><div class="profile-stat-label">Status</div><div class="profile-stat-value">Active</div></div>
+				<div><div class="profile-stat-label">Member since</div><div class="profile-stat-value">December 2024</div></div>
+			</div>
+		</div>
+	</div>
+	<div class="profile-about-section">
+		<div class="profile-about">
+			I’m ContentLTD. That’s all.
+		</div>
+	</div>
+	<script>
+	// Ripple effect for badges and stats
+	function createRipple(event) {
+		const button = event.currentTarget;
+		const circle = document.createElement('span');
+		const diameter = Math.max(button.clientWidth, button.clientHeight);
+		const radius = diameter / 2;
+		circle.style.width = circle.style.height = `${diameter}px`;
+		circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+		circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+		circle.classList.add('ripple');
+		const ripple = button.getElementsByClassName('ripple')[0];
+		if (ripple) {
+			ripple.remove();
+		}
+		button.appendChild(circle);
+	}
+	document.querySelectorAll('.profile-badge, .profile-stats > div').forEach(el => {
+		el.style.position = 'relative';
+		el.style.overflow = 'hidden';
+		el.addEventListener('click', createRipple);
+	});
+	</script>
+	<style>
+	.ripple {
+		position: absolute;
+		border-radius: 50%;
+		transform: scale(0);
+		animation: ripple 0.5s linear;
+		background-color: rgba(255,187,0,0.25);
+		pointer-events: none;
+		z-index: 2;
+	}
+	@keyframes ripple {
+		to {
+			transform: scale(2.5);
+			opacity: 0;
+		}
+	}
+	</style>
+</body>
+</html>
