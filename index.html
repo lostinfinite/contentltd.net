@@ -190,6 +190,121 @@
                         var mudflapBanner = document.getElementById('mudflap-banner');
                         var mudflapInner = document.getElementById('mudflap-inner');
                         var mudflapClose = document.getElementById('mudflap-close');
+                        // Helper to render notice/expanded content
+                        function renderMudflapNotice(expanded, showClose, onClose) {
+                            var sunsetDateObj = new Date('2025-09-16T00:00:00');
+                            var todayObj = new Date();
+                            var diffTime = sunsetDateObj - todayObj;
+                            var daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            mudflapInner.innerHTML = '';
+                            // Always add close button if showClose
+                            if (showClose) {
+                                var closeBtn = document.createElement('button');
+                                closeBtn.id = 'mudflap-close';
+                                closeBtn.innerHTML = '&times;';
+                                closeBtn.style = 'position:absolute;top:12px;left:12px;background:none;border:none;color:#FFBB00;font-size:1.7rem;font-weight:700;cursor:pointer;z-index:10;display:block;';
+                                closeBtn.onclick = function(e) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('[Mudflap] Close button clicked');
+                                    setTimeout(function() {
+                                        // Failsafe logic after 2s
+                                        var expectedBanner = `<div id="mudflap-banner" style="position: fixed; bottom: 0px; left: 0px; right: 0px; z-index: 1020; width: 100%; transition: 0.35s cubic-bezier(0.4, 1.6, 0.4, 1); cursor: pointer;" data-expanded="false">\n            <div id="mudflap-inner" style="\n                margin:0 auto; max-width:900px; border-radius:22px 22px 0 0; background:rgba(29,29,29,0.82); box-shadow:0 -8px 32px 0 rgba(0,0,0,0.18), 0 -1.5px 16px 0 rgba(255,187,0,0.08); backdrop-filter:blur(12px) saturate(1.2); border:1.5px solid rgba(255,187,0,0.18); border-bottom:none; padding:1.2rem 2.2rem; color:#fff; font-family:'Inter',Arial,sans-serif; font-size:1.13rem; margin-bottom:0; text-align:center; position:relative; transition:box-shadow 0.35s;"><div><span style="font-weight:600; color:#FFBB00;">Notice:</span> The ContentLTD Brand will be sunsetting in <span style="color:#FFBB00;">3 days</span>. See <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more info.</div></div>\n        </div>`;
+                                        var banner = document.getElementById('mudflap-banner');
+                                        var expectedInner = `<div><span style="font-weight:600; color:#FFBB00;">Notice:</span> The ContentLTD Brand will be sunsetting in <span style="color:#FFBB00;">3 days</span>. See <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more info.</div>`;
+                                        if (banner) {
+                                            var inner = banner.querySelector('#mudflap-inner');
+                                            if (inner && inner.innerHTML.trim() === expectedInner.trim()) {
+                                                console.log('[Mudflap] Banner exists and matches expected content. Failsafe not needed.');
+                                            } else {
+                                                console.log('[Mudflap] Banner exists but content is wrong. Forcing correct content.');
+                                                banner.setAttribute('style', 'position: fixed; bottom: 0px; left: 0px; right: 0px; z-index: 1020; width: 100%; transition: 0.35s cubic-bezier(0.4, 1.6, 0.4, 1); cursor: pointer;');
+                                                banner.setAttribute('data-expanded', 'false');
+                                                if (inner) {
+                                                    inner.setAttribute('style', "\n                margin:0 auto; max-width:900px; border-radius:22px 22px 0 0; background:rgba(29,29,29,0.82); box-shadow:0 -8px 32px 0 rgba(0,0,0,0.18), 0 -1.5px 16px 0 rgba(255,187,0,0.08); backdrop-filter:blur(12px) saturate(1.2); border:1.5px solid rgba(255,187,0,0.18); border-bottom:none; padding:1.2rem 2.2rem; color:#fff; font-family:'Inter',Arial,sans-serif; font-size:1.13rem; margin-bottom:0; text-align:center; position:relative; transition:box-shadow 0.35s;");
+                                                    inner.innerHTML = expectedInner;
+                                                }
+                                            }
+                                        } else {
+                                            console.log('[Mudflap] Banner does not exist. Recreating.');
+                                            var newBanner = document.createElement('div');
+                                            newBanner.id = 'mudflap-banner';
+                                            newBanner.setAttribute('style', 'position: fixed; bottom: 0px; left: 0px; right: 0px; z-index: 1020; width: 100%; transition: 0.35s cubic-bezier(0.4, 1.6, 0.4, 1); cursor: pointer;');
+                                            newBanner.setAttribute('data-expanded', 'false');
+                                            var newInner = document.createElement('div');
+                                            newInner.id = 'mudflap-inner';
+                                            newInner.setAttribute('style', "\n                margin:0 auto; max-width:900px; border-radius:22px 22px 0 0; background:rgba(29,29,29,0.82); box-shadow:0 -8px 32px 0 rgba(0,0,0,0.18), 0 -1.5px 16px 0 rgba(255,187,0,0.08); backdrop-filter:blur(12px) saturate(1.2); border:1.5px solid rgba(255,187,0,0.18); border-bottom:none; padding:1.2rem 2.2rem; color:#fff; font-family:'Inter',Arial,sans-serif; font-size:1.13rem; margin-bottom:0; text-align:center; position:relative; transition:box-shadow 0.35s;");
+                                            newInner.innerHTML = expectedInner;
+                                            newBanner.appendChild(newInner);
+                                            document.body.appendChild(newBanner);
+                                        }
+                                    }, 2000);
+                                    if (mudflapBanner.parentElement && mudflapBanner.parentElement.classList.contains('mudflap-modal')) {
+                                        // Modal: hide overlay
+                                        var modalOverlay = mudflapBanner.parentElement;
+                                        modalOverlay.classList.remove('mudflap-animate-in');
+                                        modalOverlay.classList.add('mudflap-animate-out');
+                                        setTimeout(function() {
+                                            if (modalOverlay.parentElement) modalOverlay.parentElement.removeChild(modalOverlay);
+                                            mudflapBanner.style.position = 'fixed';
+                                            mudflapBanner.style.bottom = '0';
+                                            mudflapBanner.style.left = '0';
+                                            mudflapBanner.style.right = '0';
+                                            mudflapBanner.style.width = '100%';
+                                            mudflapBanner.style.zIndex = '1020';
+                                            mudflapBanner.style.display = '';
+                                            mudflapInner.style.borderRadius = '22px 22px 0 0';
+                                            mudflapInner.style.boxShadow = '0 -8px 32px 0 rgba(0,0,0,0.18), 0 -1.5px 16px 0 rgba(255,187,0,0.08)';
+                                            mudflapInner.style.borderBottom = 'none';
+                                            mudflapInner.style.borderTop = '';
+                                            mudflapInner.style.transform = '';
+                                            mudflapInner.style.opacity = '';
+                                            closeBtn.style.display = 'none';
+                                        }, 700);
+                                    } else {
+                                        // Banner: just hide and reset to unexpanded (no X)
+                                        mudflapBanner.style.display = 'none';
+                                        mudflapBanner.setAttribute('data-expanded', 'false');
+                                    }
+                                    if (typeof onClose === 'function') onClose();
+                                };
+                                mudflapInner.appendChild(closeBtn);
+                            }
+                            if (!expanded) {
+                                var noticeDiv = document.createElement('div');
+                                noticeDiv.innerHTML = `<span style="font-weight:600; color:#FFBB00;">Notice:</span> The ContentLTD Brand will be sunsetting in <span style="color:#FFBB00;">${daysLeft} day${daysLeft !== 1 ? 's' : ''}</span>. See <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more info.`;
+                                mudflapInner.appendChild(noticeDiv);
+                            } else {
+                                var noticeDiv = document.createElement('div');
+                                noticeDiv.innerHTML = `<span style="font-weight:600; color:#FFBB00;">Notice:</span> The ContentLTD Brand will be sunsetting in <span style="color:#FFBB00;">${daysLeft} day${daysLeft !== 1 ? 's' : ''}</span>.`;
+                                noticeDiv.style = 'margin-bottom:1.2rem;font-size:1.13rem;';
+                                mudflapInner.appendChild(noticeDiv);
+                                var expl = document.createElement('div');
+                                expl.style = 'margin-bottom:1.2rem;font-size:1.08rem;max-height:50vh;overflow-y:auto;';
+                                expl.innerHTML = `The ContentLTD Brand will be sunsetting in <span style="color:#FFBB00;">${daysLeft} day${daysLeft !== 1 ? 's' : ''}</span>.<br>You can review the article <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for why.<br><br>This means that:<ul style="text-align:left;max-width:600px;margin:1.2rem auto 0 auto;"><li>The Content Solutions (SM) Bot will be shutting down</li><li>Your server(s) will not be maintaining the protections as if you were under contract</li><li>Your Contract will be invalid past 9/16/25</li><li>You will lose all ContentLTD (SM) Resources</li></ul>`;
+                                mudflapInner.appendChild(expl);
+                            }
+                        }
+                        // Initial render for banner
+                        var sunsetDateObj = new Date('2025-09-16T00:00:00');
+                        var todayObj = new Date();
+                        var diffTime = sunsetDateObj - todayObj;
+                        var daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        if (daysLeft > 0 && mudflapInner) {
+                            renderMudflapNotice(false, false, function() {
+                                mudflapBanner.setAttribute('data-expanded', 'false');
+                            });
+                            // Make banner clickable to expand
+                            mudflapBanner.style.cursor = 'pointer';
+                            mudflapBanner.addEventListener('click', function expandMudflap(e) {
+                                if (mudflapBanner.getAttribute('data-expanded') === 'true') return;
+                                mudflapBanner.setAttribute('data-expanded', 'true');
+                                renderMudflapNotice(true, true, function() {
+                                    mudflapBanner.setAttribute('data-expanded', 'false');
+                                });
+                                e.stopPropagation();
+                            });
+                        }
                         var modalOverlay = null;
                         // Helper to show mudflap as modal with animation
                                 function showMudflapModal() {
@@ -264,6 +379,24 @@
                             btn.addEventListener('click', function(e) {
                                 e.preventDefault();
                                 showMudflapModal();
+                                // When modal is shown, render the expanded notice immediately
+                                setTimeout(function() {
+                                    var mudflapBanner = document.getElementById('mudflap-banner');
+                                    var mudflapInner = document.getElementById('mudflap-inner');
+                                    if (!mudflapBanner || !mudflapInner) return;
+                                    function renderMudflapNoticeModal(expanded) {
+                                        renderMudflapNotice(expanded, true, function() {
+                                            mudflapBanner.setAttribute('data-expanded', 'false');
+                                            // Failsafe: show bottom mudflap again after 2s
+                                            setTimeout(function() {
+                                                mudflapBanner.style.display = '';
+                                            }, 2000);
+                                        });
+                                    }
+                                    renderMudflapNoticeModal(true);
+                                    mudflapBanner.style.cursor = 'pointer';
+                                    // Allow closing expanded modal with X
+                                }, 50);
                             });
                         });
                         // Close X handler
@@ -285,21 +418,165 @@
     var yyyy = today.getFullYear();
     var current = yyyy + '-' + mm + '-' + dd;
     var sunsetDate = '2025-09-16';
-    var testDate = '2025-09-16';
+    var testDate = '2025-09-14';
 
         function showMudflapOverride() {
-                document.body.innerHTML = '';
+            document.body.innerHTML = '';
+            var isPast = current >= sunsetDate;
+            if (isPast) {
+                // Credits roll effect (movie style scroll, slower, stops after @itszeph, then 'And You')
+                var credits = [
+                    { name: '@sunbunni', role: 'Co Founder' },
+                    { name: '@candychriss98', role: 'Assistant Co-Founder' },
+                    { name: '@devin_920', role: 'Project Developer' },
+                    { name: '@lostlick_', role: 'Server Manager' },
+                    { name: '@officialdaft', role: 'Legal and Ethics Representative' },
+                    { name: '@thomas1dc', role: 'Server Manager' },
+                    { name: '@thomastrain16', role: 'Visions Manager' },
+                    { name: '@mrbigred0_o', role: 'Former Asset Management' },
+                    { name: '@cayd_gaming2', role: 'Ex-Co Founder, Contributor' },
+                    { name: '@itszeph', role: 'Ex-Project Developer, Ex-Legal Representative, Contributor' }
+                ];
+                var creditsContainer = document.createElement('div');
+                creditsContainer.id = 'credits-roll';
+                creditsContainer.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;z-index:9999;overflow:hidden;display:flex;align-items:center;justify-content:center;';
+                // Style for the scroll area
+                var creditsScroll = document.createElement('div');
+                creditsScroll.style = 'position:absolute;left:0;right:0;top:0;bottom:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;';
+                // Inner credits content
+                var creditsInner = document.createElement('div');
+                creditsInner.style = 'display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Inter,Arial,sans-serif;color:#fff;font-size:1.5rem;width:100vw;';
+                creditsInner.innerHTML = '<div style="font-size:2.3rem;font-weight:700;color:#FFBB00;margin-bottom:2.5rem;">Special Thanks to...</div>';
+                credits.forEach(function(c) {
+                    var el = document.createElement('div');
+                    el.style = 'margin:1.2rem 0;font-size:1.35rem;';
+                    el.innerHTML = `<span style=\"color:#FFBB00;font-weight:600;\">${c.name}</span> <span style=\"color:#fff;font-weight:400;\">- ${c.role}</span>`;
+                    creditsInner.appendChild(el);
+                });
+                // Add gap after last credit
+                var gap = document.createElement('div');
+                gap.style = 'height:60px;';
+                creditsInner.appendChild(gap);
+                // Add 'And You' h2 with animated 'you'
+                var andYou = document.createElement('h2');
+                andYou.style = 'font-size:2.2rem;font-weight:700;margin:2.5rem 0 0 0;display:flex;align-items:center;gap:0.7rem;';
+                andYou.innerHTML = 'And <span id="animated-you" style="position:relative;display:inline-block;color:#fff;">You.</span>';
+                creditsInner.appendChild(andYou);
+                creditsScroll.appendChild(creditsInner);
+                creditsContainer.appendChild(creditsScroll);
+                document.body.appendChild(creditsContainer);
+
+                // Animate credits scroll (scroll until 'And You.' is out of view)
+                var totalCredits = credits.length + 2; // +1 for header, +1 for gap
+                var creditHeight = 48; // px per credit (approx)
+                var gapHeight = 60;
+                var h2Height = 60;
+                var scrollDistance = (totalCredits * creditHeight) + gapHeight + h2Height + window.innerHeight/2; // scroll all the way out
+                creditsInner.style.transform = `translateY(${window.innerHeight}px)`;
+                creditsInner.style.transition = 'transform 22s linear';
+                setTimeout(function() {
+                    creditsInner.style.transform = `translateY(-${scrollDistance}px)`;
+                }, 100); // allow DOM paint
+
+                // Animate 'you' text fill left to right (no background-clip, just text color)
+                var animatedYou = creditsInner.querySelector('#animated-you');
+                var youText = animatedYou.textContent;
+                animatedYou.innerHTML = '';
+                // Create span for each letter
+                for (let i = 0; i < youText.length; i++) {
+                    var span = document.createElement('span');
+                    span.textContent = youText[i];
+                    span.style.transition = 'color 0.2s linear';
+                    span.style.color = '#fff';
+                    animatedYou.appendChild(span);
+                }
+                // Animate fill over 3.5s, left to right
+                setTimeout(function() {
+                    var spans = animatedYou.querySelectorAll('span');
+                    var total = spans.length;
+                    var duration = 3500;
+                    var start = null;
+                    function animateFill(ts) {
+                        if (!start) start = ts;
+                        var elapsed = ts - start;
+                        var percent = Math.min(elapsed / duration, 1);
+                        var fillCount = Math.floor(percent * total);
+                        for (let i = 0; i < total; i++) {
+                            spans[i].style.color = (i < fillCount) ? '#FFBB00' : '#fff';
+                        }
+                        if (percent < 1) {
+                            requestAnimationFrame(animateFill);
+                        } else {
+                            // Ensure all are yellow at end
+                            for (let i = 0; i < total; i++) spans[i].style.color = '#FFBB00';
+                        }
+                    }
+                    requestAnimationFrame(animateFill);
+                }, 14000);
+
+                // After scroll, fade in quote left-to-right, then fade out left-to-right, then show mudflap
+                setTimeout(function() {
+                    // Smooth fade/slide in quote
+                    var quote = document.createElement('div');
+                    quote.textContent = 'Thank You for supporting us and our mission to improve ER;LC.';
+                    quote.style = 'position:fixed;left:0;right:0;top:50%;transform:translateY(-40px);font-size:2.1rem;font-weight:600;color:#fff;text-align:center;z-index:10000;letter-spacing:0.01em;opacity:0;pointer-events:none;background:none;transition:opacity 0.7s cubic-bezier(.4,1.6,.4,1), transform 0.7s cubic-bezier(.4,1.6,.4,1);';
+                    document.body.appendChild(quote);
+                    setTimeout(function() {
+                        quote.style.opacity = '1';
+                        quote.style.transform = 'translateY(0)';
+                    }, 60);
+                    // After a few seconds, fade/slide out
+                    setTimeout(function() {
+                        quote.style.opacity = '0';
+                        quote.style.transform = 'translateY(40px)';
+                        setTimeout(function() {
+                            quote.remove();
+                            creditsContainer.style.transition = 'opacity 1.2s';
+                            creditsContainer.style.opacity = '0';
+                            setTimeout(function() {
+                                creditsContainer.remove();
+                                showMudflapFinal();
+                            }, 1200);
+                        }, 700);
+                    }, 3200);
+                }, 22500);
+
+                // After credits, show mudflap
+                function showMudflapFinal() {
+                    var mudflap = document.createElement('div');
+                    mudflap.style = 'min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#1d1d1d;font-family:Inter,Arial,sans-serif;color:#fff;';
+                    var tenseTitle = 'ContentLTD Has Sunsetted';
+                    var tenseMsg = 'ContentLTD sunsetted on <b>9/16/2025</b>. Please see <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more information.<br><br>Thank you for your support!';
+                    mudflap.innerHTML = `
+                        <div style=\"max-width:600px;width:100%;margin:0 auto;padding:2.5rem 1.2rem 1.2rem 1.2rem;text-align:center;\">
+                            <div style=\"font-size:2.2rem;font-weight:700;color:#FFBB00;margin-bottom:1.2rem;\">${tenseTitle}</div>
+                            <div style=\"font-size:1.18rem;margin-bottom:2.2rem;\">${tenseMsg}</div>
+                        </div>
+                        <div id='footer-container'></div>
+                    `;
+                    document.body.appendChild(mudflap);
+                    // Re-inject footer
+                    var script = document.createElement('script');
+                    script.src = '/app.js';
+                    document.body.appendChild(script);
+                }
+            } else {
+                // Not past sunset, show normal mudflap with countdown
                 var mudflap = document.createElement('div');
                 mudflap.style = 'min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#1d1d1d;font-family:Inter,Arial,sans-serif;color:#fff;';
-                var isPast = current >= sunsetDate;
-                var tenseTitle = isPast ? 'ContentLTD Has Sunsetted' : 'ContentLTD Is Sunsetting';
-                var tenseMsg = isPast
-                    ? 'ContentLTD sunsetted on <b>9/16/2025</b>. Please see <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more information.<br><br>Thank you for your support!'
-                    : 'ContentLTD will sunset on <b>9/16/2025</b>. Please see <a href="https://contentltd.net/press/9925-sunsetting.html" style="color:#FFBB00;text-decoration:underline;">here</a> for more information.<br><br>Thank you for your support!';
+                var tenseTitle = 'ContentLTD Is Sunsetting';
+                // Calculate days left until sunset
+                var sunsetDateObj = new Date('2025-09-16T00:00:00');
+                var todayObj = new Date();
+                var diffTime = sunsetDateObj - todayObj;
+                var daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    var countdownMsg = daysLeft > 0 ? `<div style='color:#FFBB00;font-size:1.15rem;font-weight:600;margin-bottom:1.1rem;'>${daysLeft} day${daysLeft !== 1 ? 's' : ''} until sunset</div>` : '';
+                var tenseMsg = 'ContentLTD will sunset on <b>9/16/2025</b>. Please see <a href=\"https://contentltd.net/press/9925-sunsetting.html\" style=\"color:#FFBB00;text-decoration:underline;\">here</a> for more information.<br><br>Thank you for your support!';
                 mudflap.innerHTML = `
-                        <div style="max-width:600px;width:100%;margin:0 auto;padding:2.5rem 1.2rem 1.2rem 1.2rem;text-align:center;">
-                            <div style="font-size:2.2rem;font-weight:700;color:#FFBB00;margin-bottom:1.2rem;">${tenseTitle}</div>
-                            <div style="font-size:1.18rem;margin-bottom:2.2rem;">${tenseMsg}</div>
+                        <div style=\"max-width:600px;width:100%;margin:0 auto;padding:2.5rem 1.2rem 1.2rem 1.2rem;text-align:center;\">
+                            <div style=\"font-size:2.2rem;font-weight:700;color:#FFBB00;margin-bottom:1.2rem;\">${tenseTitle}</div>
+                            ${countdownMsg}
+                            <div style=\"font-size:1.18rem;margin-bottom:2.2rem;\">${tenseMsg}</div>
                         </div>
                         <div id='footer-container'></div>
                 `;
@@ -308,6 +585,7 @@
                 var script = document.createElement('script');
                 script.src = '/app.js';
                 document.body.appendChild(script);
+            }
         }
 
     if (current === testDate || current >= sunsetDate) {
